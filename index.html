@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pesan Jasa Sosial Media</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to right, #ff4b5c, #1e90ff); /* merah ke biru */
+      color: white;
+      padding: 30px;
+      position: relative;
+      overflow-x: hidden;
+      width: 100vw;
+      min-height: 100vh;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 2em;
+      z-index: 2;
+      position: relative;
+    }
+
+    .menu-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+      z-index: 2;
+      position: relative;
+    }
+
+    .card {
+      background-color: #0b132b;
+      border-radius: 20px;
+      padding: 18px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+      background-color: #1c2541;
+    }
+
+    .services {
+      display: none;
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: 10px;
+      background-color: rgba(255, 255, 255, 0.1);
+      z-index: 2;
+      position: relative;
+    }
+
+    select, input {
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      margin-top: 10px;
+      width: 100%;
+    }
+
+    button {
+      padding: 15px;
+      background-color: #00cec9;
+      border: none;
+      color: white;
+      font-size: 1em;
+      border-radius: 15px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #01a3a4;
+    }
+
+    .stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .stars::before,
+    .stars::after {
+      content: '';
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      background: transparent url('https://i.ibb.co/5RjqVxP/starfield.png') repeat;
+      animation: moveStars 100s linear infinite;
+      opacity: 0.4;
+    }
+
+    .stars::after {
+      animation-duration: 150s;
+      opacity: 0.2;
+    }
+
+    @keyframes moveStars {
+      0% {
+        transform: translate(0, 0);
+      }
+      100% {
+        transform: translate(-100px, -200px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="stars"></div>
+  <h1>trustframe suntik sosmed</h1>
+
+  <div class="menu-section">
+    <div class="card" onclick="showServices('tiktok')">TikTok</div>
+    <div class="card" onclick="showServices('instagram')">Instagram</div>
+    <div class="card" onclick="showServices('youtube')">YouTube</div>
+    <div class="card" onclick="showServices('whatsapp')">WhatsApp</div>
+  </div>
+
+  <div class="services" id="services"></div>
+
+  <script>
+    const data = {
+      tiktok: {
+        "1000 like": 4000,
+        "100k view": 6000,
+        "1000 followers (no refill)": 41000,
+        "1000 save": 3900,
+        "1000 share": 3900
+      },
+      instagram: {
+        "1000 followers": 56000,
+        "1000 like indo": 41000,
+        "5000 like luar": 26000,
+        "10000 view luar": 18000
+      },
+      youtube: {
+        "1000 like": 19000,
+        "1000 subs refill": 44000,
+        "1000 view + bonus like": 31000
+      },
+      whatsapp: {
+        "100 channel member": 7000
+      }
+    };
+
+    function showServices(platform) {
+      const container = document.getElementById('services');
+      container.innerHTML = `<h2>${platform.toUpperCase()}</h2><label for='menu'>Pilih Menu:</label><select id='menu'></select><label for='jumlah'>Jumlah Pesanan (min. 50):</label><input type='number' id='jumlah' value='50' min='50'><button onclick='buatPesanan("${platform}")'>Buat Pesanan</button>`;
+      container.style.display = 'block';
+
+      const select = document.getElementById('menu');
+      for (let item in data[platform]) {
+        const opt = document.createElement('option');
+        opt.value = item;
+        opt.textContent = `${item} - Rp${data[platform][item].toLocaleString()}`;
+        select.appendChild(opt);
+      }
+    }
+
+    function buatPesanan(platform) {
+      const menu = document.getElementById('menu').value;
+      const jumlah = parseInt(document.getElementById('jumlah').value);
+      const harga = data[platform][menu];
+
+      if (jumlah < 50) {
+        Swal.fire('Minimal pesanan adalah 50!');
+        return;
+      }
+
+      const total = harga * (jumlah / 1000);
+      const pesan = `Halo min saya meu beli jasa ${platform} untuk ${menu} sebanyak ${jumlah}.
+Total harga: Rp${Math.round(total).toLocaleString()}`;
+
+      const waLink = `https://wa.me/62895326426758?text=${encodeURIComponent(pesan)}`;
+      window.open(waLink, '_blank');
+    }
+  </script>
+</body>
+</html>
